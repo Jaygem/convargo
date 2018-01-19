@@ -149,11 +149,13 @@ const actors = [{
 function FinalPrice(){
 	var Ppv,Ppm;
 	var results = [];
-	for(var dodo in deliveries)
+	for(var i=0; i<deliveries.length;i++)
 	{
-		var trucker = truckers.find(elem => elem.id == dodo.truckerId);
-		Ppv = dodo.volume*dodo.pricePerVolume;
-		Ppm = dodo.distance*dodo.pricePerKm;
+		console.log(deliveries[i].name);
+		var trucker = truckers.find(truk => truk.id == deliveries[i].truckerId);
+		console.log(trucker);
+		Ppv = deliveries[i].volume*trucker.pricePerVolume;
+		Ppm = deliveries[i].distance*trucker.pricePerKm;
 		if (Ppv>=5 && Ppv<10)
 		{
 			Ppv*=0.9;
@@ -163,17 +165,42 @@ function FinalPrice(){
 			Ppv*=0.7;
 		}
 		else if(Ppv>=25)
-		{3
+		{
 			Ppv*=0.5;
 		}
-		results.push(Ppv+Ppm);
+		results.push({"price":Ppv+Ppm});
 	};
 	return results;
 }
 
-function SplittingMoney(price)
+function PriceFor1(delivery)
 {
-	var thing = price*0.3;
+	var Ppm, Ppv;
+		var trucker = truckers.find(truk => truk.id == delivery.truckerId);
+		Ppv = delivery.volume*trucker.pricePerVolume;
+		Ppm = delivery.distance*trucker.pricePerKm;
+		if (Ppv>=5 && Ppv<10)
+		{
+			Ppv*=0.9;
+		}
+		else if(Ppv>=10 && Ppv<25)
+		{
+			Ppv*=0.7;
+		}
+		else if(Ppv>=25)
+		{
+			Ppv*=0.5;
+		}
+		return Ppv+Ppm;
+}
+
+function SplittingMoney(delivery)
+{
+	var thing = PriceFor1(delivery)*0.3;
+	var insurance = thing*0.5;
+	var treasury = delivery.distance/500;
+	var income = thing - insurance - treasury;
+	return {"money taken" : treasury};
 }
 
 
@@ -181,3 +208,4 @@ console.log(truckers);
 console.log(deliveries);
 console.log(actors);
 console.log(FinalPrice());
+console.log(SplittingMoney(deliveries[0]));
