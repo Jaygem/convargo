@@ -196,11 +196,34 @@ function PriceFor1(delivery)
 
 function SplittingMoney(delivery)
 {
-	var thing = PriceFor1(delivery)*0.3;
+	var thing = Math.round(PriceFor1(delivery)*0.3);
 	var insurance = thing*0.5;
-	var treasury = delivery.distance/500;
+	var treasury = Math.floor(delivery.distance/500)+1;
 	var income = thing - insurance - treasury;
-	return {"money taken" : treasury};
+	return {"money taken" : income};
+}
+
+function NewDeductiblePricing()
+{
+	var toreturn = [];
+	var DeductiblePrice;
+	var NewPrice;
+	for(var i = 0 ; i< deliveries.length;i++)
+	{
+		
+		if(deliveries[i].options.deductibleReduction)
+		{
+			DeductiblePrice = 200;
+			NewPrice = PriceFor1(deliveries[i])+deliveries[i];
+		}
+		else
+		{
+			DeductiblePrice = 1000;
+			NewPrice = PriceFor1(deliveries[i]);
+		}
+		toreturn.push({"deductible":DeductiblePrice,"New Price" : NewPrice});
+	}
+	return toreturn;
 }
 
 
@@ -208,4 +231,5 @@ console.log(truckers);
 console.log(deliveries);
 console.log(actors);
 console.log(FinalPrice());
-console.log(SplittingMoney(deliveries[0]));
+console.log(SplittingMoney(deliveries[1]));
+console.log(NewDeductiblePricing());
