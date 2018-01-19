@@ -145,6 +145,39 @@ const actors = [{
   }]
 }];
 
+
+function FinalPrice(){
+	var Ppv,Ppm;
+	var results = [];
+	for(var dodo in deliveries)
+	{
+		var trucker = truckers.find(elem => elem.id == dodo.truckerId);
+		Ppv = dodo.volume*dodo.pricePerVolume;
+		Ppm = dodo.distance*dodo.pricePerKm;
+		if (Ppv>=5 && Ppv<10)
+		{
+			Ppv*=0.9;
+		}
+		else if(Ppv>=10 && Ppv<25)
+		{
+			Ppv*=0.7;
+		}
+		else if(Ppv>=25)
+		{3
+			Ppv*=0.5;
+		}
+		results.push(Ppv+Ppm);
+	};
+	return results;
+}
+
+function SplittingMoney(price)
+{
+	var thing = price*0.3;
+}
+
+
 console.log(truckers);
 console.log(deliveries);
 console.log(actors);
+console.log(FinalPrice());
